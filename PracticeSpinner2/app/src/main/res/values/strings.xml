@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">PracticeSpinner</string>
+    <string name="song1"> <!--문자열 작성 시 탈출문자로 인식될 수 있는 문자들은 모두 탈출문자 형태로 작성해줘야함-->
+        1. 누가 내 말투가 재수없대 잘난척이 심하대
+        또 누구는 내가 너무 착하대 바보같을 정도래
+        가끔은 이해조차 안되는 시선들 억울하기도 하지만
+        오해가 만든 수많은 나와 얘기해 우린 모두 다 \'나\'야
+    </string>
+    <string name="song2">
+        Either way all good 전부 좋다구
+        누가 맞고 틀린 게 아닌데 전부 다르게 사랑하듯
+        Either way I\'m good
+    </string>
+    <string name="song3">
+        2. 내겐 언니같은 친구인데 어리광이 심하대
+        털털한줄 알았던 저 아이는 마음이 너무 약한걸
+        쟤 I라서 그래 넌 E라서 그래 됐고 그냥 V나 하자
+    </string>
+</resources>
