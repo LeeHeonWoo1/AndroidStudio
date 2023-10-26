@@ -60,15 +60,17 @@
     <TextView
         android:id="@+id/textView3"
         android:layout_width="357dp"
-        android:layout_height="136dp"
+        android:layout_height="250dp"
         android:fontFamily="@font/cafe24"
-        android:text="퀴즈 규칙\n\n1. 후렴구의 초성이 제공됩니다\n2. 4지선다 입니다."
+        android:text="퀴즈 규칙\n\n1. 후렴구의 초성이 제공됩니다\n2. 4지선다 입니다.
+        \n3. 사용할 수 있는 힌트는 3개입니다.\n4. 각각 15, 20, 25포인트를 소모합니다.
+        \n5. 퀴즈를 한번에 맞추면 40점, 세 번내에 맞추면 30점, 나머지는 20점을 획득합니다"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.629"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.764" />
+        app:layout_constraintVertical_bias="0.939" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
