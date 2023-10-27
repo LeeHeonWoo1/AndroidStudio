@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="quizType">
+        <item>가사 초성으로 노래 제목 맞추기</item>
+        <item>간주 1초 듣고 노래 맞추기</item>
+    </string-array>
+</resources>
