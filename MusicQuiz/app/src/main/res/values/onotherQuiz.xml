@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="question4">
+        ㅇㄹㄴㅇ ㄲㅊㄹ ㅁㅊ ㄱㅈㅊㄹ ㅅㄱㅇ ㄷㄹㅅ ㅇㄹㅇ ㄷ ㅅㅁ ㅇㄷㅁ ㄱㅊ ㅅㅅ ㅅㅇㅅ ㄴㄹ ㅈㅇ ㅈㄱ
+    </string>
+    <string name="question4Answer1">
+        건물 사이에 피어난 장미
+    </string>
+    <string name="question4Answer2">
+        Hype Boy
+    </string>
+    <string name="question4Answer3">
+        시간을 달려서
+    </string>
+    <string name="question4Answer4">
+        소녀시대
+    </string>
+</resources>
