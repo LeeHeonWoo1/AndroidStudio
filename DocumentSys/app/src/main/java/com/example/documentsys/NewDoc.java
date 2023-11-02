@@ -24,7 +24,7 @@ public class NewDoc extends AppCompatActivity {
     private Connection connection;
     private String userName;
     private String userGrade;
-    private static int docNum = 19724;
+    private static int docNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +40,22 @@ public class NewDoc extends AppCompatActivity {
 
         TextView userNameText = findViewById(R.id.userNameLayout);
         userNameText.setText("환영합니다. " + userName + " " + userGrade + "님!");
+
+        try{
+            Class.forName(DRIVER);
+            this.connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+
+            Statement statement = connection.createStatement();
+            ResultSet resultset = statement.executeQuery("SELECT MAX(DOC_NUMBER) FROM DOCUMENT");
+            StringBuffer stringBuffer = new StringBuffer();
+            while (resultset.next()){
+                stringBuffer.append(resultset.getString(1));
+            }
+
+            docNum = Integer.parseInt(stringBuffer.toString());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void onClickedSubmit(View view) {
@@ -57,20 +73,26 @@ public class NewDoc extends AppCompatActivity {
         String isApproved = "결재 대기";
 
         try {
+            docNum++;
+
             Class.forName(DRIVER); // DRIVER
             this.connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 
             Statement statement = connection.createStatement();
-            statement.executeQuery(
+            statement.executeUpdate(
                     "INSERT INTO DOCUMENT(DOC_NAME, ISAPPROVED, WRITE_DATE, WRITER, SENDER, DOC_NUMBER, CONTENT)" +
                     " VALUES ('" + title + "', '" + isApproved + "', '" + today + "', '" + userName + "', '" + comp + "', " +
                     docNum + ", '"+ mainText+"')");
 
             Toast.makeText(getApplicationContext(), "등록이 완료되었습니다.", Toast.LENGTH_LONG).show();
-            docNum++;
+
+            Intent intent = getIntent();
+            finish();
+            overridePendingTransition(0, 0);
+            startActivity(intent);
+            overridePendingTransition(0, 0);
         } catch (Exception e) {
-            newMainText.setText(e.toString());
-//            Toast.makeText(getApplicationContext(), "문제가 발생하였습니다.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "문제가 발생하였습니다.", Toast.LENGTH_LONG).show();
         }
     }
 }
