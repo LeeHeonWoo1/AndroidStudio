@@ -24,6 +24,7 @@ public class DocList extends AppCompatActivity {
     private Connection connection;
     private String userName;
     private String userGrade;
+    private String mode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +37,7 @@ public class DocList extends AppCompatActivity {
         Intent fromMenuList = getIntent();
         userName = fromMenuList.getStringExtra("userName");
         userGrade = fromMenuList.getStringExtra("userGrade");
+        mode = fromMenuList.getStringExtra("mode");
 
         TextView userNameText = findViewById(R.id.userNameLayout);
         userNameText.setText("환영합니다. " + userName+ " " + userGrade + "님!");
@@ -45,7 +47,15 @@ public class DocList extends AppCompatActivity {
             this.connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT DOC_NAME, WRITER, TO_CHAR(WRITE_DATE, 'YYYY-MM-DD') FROM DOCUMENT ORDER BY WRITE_DATE");
+            String query;
+
+            if (mode.equals("docList")){
+                query = "SELECT DOC_NAME, WRITER, TO_CHAR(WRITE_DATE, 'YYYY-MM-DD') FROM DOCUMENT ORDER BY WRITE_DATE";
+            }else{
+                query = "SELECT DOC_NAME, WRITER, TO_CHAR(WRITE_DATE, 'YYYY-MM-DD') FROM DOCUMENT WHERE ISAPPROVED='결재 대기' ORDER BY WRITE_DATE";
+            }
+
+            ResultSet resultSet = statement.executeQuery(query);
             StringBuffer stringBuffer = new StringBuffer();
 
             while(resultSet.next()){
