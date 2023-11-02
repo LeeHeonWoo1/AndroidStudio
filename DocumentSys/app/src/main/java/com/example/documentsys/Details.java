@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,11 +48,14 @@ public class Details extends AppCompatActivity {
         TextView userNameText = findViewById(R.id.userNameLayout);
         userNameText.setText("환영합니다. " + userName + " " + userGrade + "님!");
 
+        TextView signLayout = findViewById(R.id.signLayout);
+        ImageView signImg = findViewById(R.id.signMark);
+
         try{
             Class.forName(DRIVER);
             this.connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 
-            String key = title.substring(0, 5);
+            String key = title.substring(0, 4);
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM DOCUMENT WHERE DOC_NAME LIKE '%"+key+"%'");
             StringBuffer approved = new StringBuffer();
@@ -78,33 +82,46 @@ public class Details extends AppCompatActivity {
             writeDate.setText(writeDateBuffer.toString());
             sender.setText(senderBuffer.toString());
 
+            if (isApproved.getText().toString().equals("결재 완료")){
+                signImg.setVisibility(View.VISIBLE);
+            }else{
+                signImg.setVisibility(View.INVISIBLE);
+            }
+
+            docnum.delete(0, -1);
+            approved.delete(0, -1);
+            mainBuffer.delete(0, -1);
+            writerBuffer.delete(0, -1);
+            writeDateBuffer.delete(0, -1);
+            senderBuffer.delete(0, -1);
+
         }catch (Exception e){
             e.printStackTrace();
         }
     }
 
-    public void onClickedDelete(View view){
-        TextView mainContent = findViewById(R.id.mainContent);
-
-        try{
-            Class.forName(DRIVER);
-            this.connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-
-            String query;
-
-            if (title.contains("...")){
-                String key = title.substring(0, title.indexOf("..."));
-                query = "DELETE FROM DOCUMENT WHERE DOC_NAME LIKE '%"+key+"%'";
-            }else {
-                query = "DELETE FROM DOCUMENT WHERE DOC_NAME='" + title + "'";
-            }
-
-            Statement statement = connection.createStatement();
-            statement.executeQuery(query);
-
-            Toast.makeText(getApplicationContext(), "삭제가 완료되었습니다.", Toast.LENGTH_LONG).show();
-        }catch (Exception e){
-            mainContent.setText(e.toString());
-        }
-    }
+//    public void onClickedDelete(View view){
+//        TextView mainContent = findViewById(R.id.mainContent);
+//
+//        try{
+//            Class.forName(DRIVER);
+//            this.connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+//
+//            String query;
+//
+//            if (title.contains("...")){
+//                String key = title.substring(0, title.indexOf("..."));
+//                query = "DELETE FROM DOCUMENT WHERE DOC_NAME LIKE '%"+key+"%'";
+//            }else {
+//                query = "DELETE FROM DOCUMENT WHERE DOC_NAME='" + title + "'";
+//            }
+//
+//            Statement statement = connection.createStatement();
+//            statement.executeQuery(query);
+//
+//            Toast.makeText(getApplicationContext(), "삭제가 완료되었습니다.", Toast.LENGTH_LONG).show();
+//        }catch (Exception e){
+//            mainContent.setText(e.toString());
+//        }
+//    }
 }
