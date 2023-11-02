@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -33,6 +34,7 @@ public class MenuList extends AppCompatActivity {
         Intent toDocList = new Intent(this, DocList.class);
         toDocList.putExtra("userName", userName);
         toDocList.putExtra("userGrade", userGrade);
+        toDocList.putExtra("mode", "docList");
         startActivity(toDocList);
     }
 
@@ -47,5 +49,25 @@ public class MenuList extends AppCompatActivity {
         toNewDoc.putExtra("userName", userName);
         toNewDoc.putExtra("userGrade", userGrade);
         startActivity(toNewDoc);
+    }
+
+    public void onClickedCheckList(View view){
+        Intent toCheckList = new Intent(this, DocList.class);
+        toCheckList.putExtra("userName", userName);
+        toCheckList.putExtra("userGrade", userGrade);
+        toCheckList.putExtra("mode", "check");
+        startActivity(toCheckList);
+    }
+
+    public void onClickedApprove(View view){
+        if (userGrade.equals("부대표") || userGrade.equals("대표")){
+            Intent toApprove = new Intent(this, Approve.class);
+            toApprove.putExtra("userName", userName);
+            toApprove.putExtra("userGrade", userGrade);
+
+            startActivity(toApprove);
+        }else{
+            Toast.makeText(getApplicationContext(), "결재 권한이 없습니다.", Toast.LENGTH_LONG).show();
+        }
     }
 }
