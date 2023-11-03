@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String PASSWORD = "password";
     private Connection connection;
 
-    @Override // 굳이 필요하진 않지만 오버라이딩 중이라는걸 명시적으로 선언만 한다.
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickedLogin(View view){
+        // 사용자가 입력하는 ID와 password
         TextView userID = findViewById(R.id.userID);
         TextView userPassword = findViewById(R.id.userPassword);
 
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
             this.connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 
             Statement statement = connection.createStatement();
+            // ID가 일치하는 행의 password와 사용자의 이름, 직급을 가져온다.
             ResultSet resultSet = statement.executeQuery("SELECT USER_PW, USER_NAME, GRADE FROM DOCUMENTSYS WHERE USER_ID='"+userID.getText().toString()+"'");
             StringBuffer stringBuffer = new StringBuffer();
             StringBuffer stringBuffer2 = new StringBuffer();
@@ -50,15 +52,18 @@ public class MainActivity extends AppCompatActivity {
                 stringBuffer2.append(resultSet.getString(2));
                 stringBuffer3.append(resultSet.getString(3));
             }
-
+            // 만약 DB에 등재된 PASSWORD와 일치하다면
             if (userPassword.getText().toString().equals(stringBuffer.toString())){
+                // Toast 메세지를 띄우고
                 Toast.makeText(getApplicationContext(), "로그인 성공 :)", Toast.LENGTH_SHORT).show();
 
+                // 메뉴 리스트 액티비티로 전환하되, stringExtra로 유저의 이름과 직급을 넘긴다.
                 Intent writeDocument = new Intent(this, MenuList.class);
                 writeDocument.putExtra("userName", stringBuffer2.toString());
                 writeDocument.putExtra("userGrade", stringBuffer3.toString());
                 startActivity(writeDocument);
-            }else{
+            }else{ // 로그인에 실패하는 경우는
+                // 실패 Toast 메세지를 띄운다.
                 Toast.makeText(getApplicationContext(), "아이디 혹은 비밀번호를 다시 확인하세요.", Toast.LENGTH_SHORT).show();
             }
         }catch (Exception e){
@@ -66,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // 사원 등록 액티비티 전환 메소드
     public void onClickedToSignUp(View view){
         Intent toSignUp = new Intent(this, SignUp.class);
 
