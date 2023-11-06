@@ -55,7 +55,11 @@ public class Details extends AppCompatActivity {
             Class.forName(DRIVER);
             this.connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 
-            String key = title.substring(0, 4);
+            String key;
+
+            if (title.length() >= 4) key = title.substring(0, 4);
+            else key = title;
+
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM DOCUMENT WHERE DOC_NAME LIKE '%"+key+"%'");
             StringBuffer approved = new StringBuffer();
@@ -88,12 +92,12 @@ public class Details extends AppCompatActivity {
                 signImg.setVisibility(View.INVISIBLE);
             }
 
-            docnum.delete(0, -1);
-            approved.delete(0, -1);
-            mainBuffer.delete(0, -1);
-            writerBuffer.delete(0, -1);
-            writeDateBuffer.delete(0, -1);
-            senderBuffer.delete(0, -1);
+            docnum.delete(0, docnum.toString().length());
+            approved.delete(0, approved.toString().length());
+            mainBuffer.delete(0, mainBuffer.toString().length());
+            writerBuffer.delete(0, writerBuffer.toString().length());
+            writeDateBuffer.delete(0, writeDateBuffer.toString().length());
+            senderBuffer.delete(0, senderBuffer.toString().length());
 
         }catch (Exception e){
             e.printStackTrace();
