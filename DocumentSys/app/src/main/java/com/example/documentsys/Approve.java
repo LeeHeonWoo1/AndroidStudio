@@ -117,9 +117,16 @@ public class Approve extends AppCompatActivity {
 
             Statement statement = connection.createStatement();
 
+            String key;
             for (int i = 0; i < checkBoxList.length; i++) {
                 CheckBox checkBox = checkBoxList[i];
-                String key = checkBox.getText().toString().substring(0, 4);
+                if (checkBox.getText().toString().length() >= 4) {
+                    key = checkBox.getText().toString().substring(0, 4);
+                }
+                else {
+                    key = checkBox.getText().toString();
+                }
+
                 if (checkBox.isChecked()){
                     statement.executeUpdate("UPDATE DOCUMENT SET ISAPPROVED='결재 완료' WHERE DOC_NAME LIKE '%"+key+"%'");
                 }
