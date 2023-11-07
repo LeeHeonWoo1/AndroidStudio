@@ -7,6 +7,18 @@
     tools:context=".MainActivity">
 
     <Spinner
+        android:id="@+id/spinner2"
+        android:layout_width="378dp"
+        android:layout_height="49dp"
+        android:entries="@array/test"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.484"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.171" />
+
+    <Spinner
         android:id="@+id/spinner"
         android:layout_width="378dp"
         android:layout_height="49dp"
@@ -22,8 +34,8 @@
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="160dp"
-        android:layout_marginTop="120dp"
+        android:layout_marginStart="168dp"
+        android:layout_marginTop="204dp"
         android:onClick="onClicked"
         android:text="Button"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,8 +43,8 @@
 
     <MultiAutoCompleteTextView
         android:id="@+id/text23"
-        android:layout_width="366dp"
-        android:layout_height="496dp"
+        android:layout_width="358dp"
+        android:layout_height="407dp"
         android:text="MultiAutoCompleteTextView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
