@@ -66,6 +66,7 @@
 | EMP_NUM | 사번 |
 | RANK | 직급 |
 | DEPT | 부서 |
+|EMAIL|이메일|
 
 
 `회원전용 테이블`<br>
@@ -78,6 +79,8 @@
 | USERPW | 회원PW |
 | MILE | 마일리지 |
 | RANK | 등급 |
+|PHONE|전화번호|
+|EMAIL|이메일|
 
 `관리자 사용자 공용 테이블`<br>
 Q&A페이지
