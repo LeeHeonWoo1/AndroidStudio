@@ -16,7 +16,6 @@ import com.example.tatproject.R;
 import java.util.ArrayList;
 
 public class BookRecyclerViewAdapter extends RecyclerView.Adapter<BookRecyclerViewAdapter.ViewHolder> {
-//
     private ArrayList<BookSingleItem> items = null;
     private Context context;
     String username;
