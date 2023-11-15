@@ -5,20 +5,16 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.tatproject.ComplainOrQA;
-import com.example.tatproject.PackDetailActivity;
-import com.example.tatproject.PackageActivity;
 import com.example.tatproject.QADetail;
 import com.example.tatproject.R;
 
 import java.util.ArrayList;
-import java.util.List;
+
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
     //
     private ArrayList<SingleItem> items = null;
@@ -29,15 +25,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         TextView textTitle;
         TextView textWriter;
         TextView textWriteDate;
-        ImageView imageView;
+        TextView textArticleNum;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             textTitle = itemView.findViewById(R.id.text_title);
-            textWriter = itemView.findViewById(R.id.text_writer);
-            textWriteDate = itemView.findViewById(R.id.text_write_date);
-            imageView = itemView.findViewById(R.id.imageView);
+            textWriter = itemView.findViewById(R.id.textPrice);
+            textWriteDate = itemView.findViewById(R.id.textJourney);
+            textArticleNum = itemView.findViewById(R.id.articleNum);
         }
     }
 
@@ -65,12 +61,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         String title = items.get(position).QATitle;
         String writer = items.get(position).writer;
         String writeDate = items.get(position).writeDate;
-        int resID = items.get(position).resID;
+        int articleNum = items.get(position).articleNum;
 
         holder.textTitle.setText(title);
         holder.textWriter.setText(writer);
         holder.textWriteDate.setText(writeDate);
-        holder.imageView.setImageResource(resID);
+        holder.textArticleNum.setText("\n" + String.valueOf(articleNum));
 
         holder.textTitle.setOnClickListener(new View.OnClickListener() {
             @Override
