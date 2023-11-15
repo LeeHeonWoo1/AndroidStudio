@@ -1,30 +1,46 @@
 package com.example.tatproject;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
-import android.widget.TableLayout;
-import android.widget.TableRow;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.example.tatproject.ForRecyclerView.PackRecyclerViewAdapter;
+import com.example.tatproject.ForRecyclerView.PackageSingleItem;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class PackageActivity extends AppCompatActivity {
     // 본인 DB계정으로 변경
     private static final String DRIVER = "oracle.jdbc.OracleDriver";
 
-    private static final String URL = "jdbc:oracle:thin:@192.168.30.4:1521:xe";
-    private static final String USERNAME = "c##group";
-    private static final String PASSWORD = "1234";
+    private static final String URL = "jdbc:oracle:thin:@IPv4Address:port:xe";
+    private static final String USERNAME = "username";
+    private static final String PASSWORD = "password";
     private Connection connection;
     private String username;
+    private ArrayList<PackageSingleItem> list = new ArrayList<>();
+    private ArrayList<PackageSingleItem> search_list = new ArrayList<>();
+    private PackRecyclerViewAdapter adapter;
+    private PackRecyclerViewAdapter searchAdapter;
+    private PackRecyclerViewAdapter pva;
+    private String userid;
 
     private String id;
 
@@ -32,94 +48,89 @@ public class PackageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_package);
-        username = getIntent().getStringExtra("username");
-        TextView logedout = findViewById(R.id.logedout);
-        TextView login = findViewById(R.id.logined);
-
-        if (username.equals("")){
-            logedout.setVisibility(View.VISIBLE);
-            login.setVisibility(View.INVISIBLE);
-        }else {
-            logedout.setVisibility(View.INVISIBLE);
-            login.setVisibility(View.VISIBLE);
-        }
-
 
         //보안정책
         StrictMode.ThreadPolicy threadPolicy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(threadPolicy);
-        TableLayout table = findViewById(R.id.tableLayout);
-        try {
-            Class.forName(DRIVER); // DRIVER
+
+        username = getIntent().getStringExtra("username");
+        userid = getIntent().getStringExtra("user");
+
+        TextView logedout = findViewById(R.id.logedout);
+        TextView login = findViewById(R.id.logined);
+        TextView logout = findViewById(R.id.logout8);
+
+        if (username.equals("")){
+            logedout.setVisibility(View.VISIBLE);
+            login.setVisibility(View.INVISIBLE);
+            logout.setVisibility(View.INVISIBLE);
+        }else {
+            logedout.setVisibility(View.INVISIBLE);
+            login.setVisibility(View.VISIBLE);
+            logout.setVisibility(View.VISIBLE);
+        }
+
+        EditText editText;
+
+        try{
+            Class.forName(DRIVER);
             this.connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 
             Statement statement = connection.createStatement();
-            String query = "SELECT PACK_ID,PACK_NAME, PRICE FROM CREATE_PACK";
-
-            ResultSet resultSet = statement.executeQuery(query);
+            ResultSet resultSet = statement.executeQuery("SELECT PACK_ID, PACK_NAME, PRICE FROM CREATE_PACK ORDER BY PACK_ID");
             StringBuffer stringBuffer = new StringBuffer();
 
-            while (resultSet.next()){
-                stringBuffer.append(resultSet.getString(1)+","); // 패키지 명
-                stringBuffer.append(resultSet.getString(2)+","); // 가격
-                stringBuffer.append(resultSet.getString(3)+",");
+            while(resultSet.next()){
+                stringBuffer.append(resultSet.getString(1) + ",");
+                stringBuffer.append(resultSet.getString(2) + ",");
+                stringBuffer.append(resultSet.getString(3) + ",");
             }
-            String[] newData = stringBuffer.toString().split(","); // 각 행을 담기 위한 배열 ,로 구분
 
             int idx = 0;
-            for(int i = 0; i < newData.length / 3; i++){
-                TextView packID = new TextView(getApplicationContext());
-                packID.setWidth(80);
-                packID.setHeight(90);
-                packID.setText(newData[idx]+"\n");
-                packID.setTextSize(17);
-                packID.setTypeface(Typeface.SERIF,Typeface.BOLD);
+            String[] stringArr = stringBuffer.toString().split(",");
 
-                TextView packTitle = new TextView(getApplicationContext());
-                packTitle.setWidth(200);
-                packTitle.setHeight(90);
-                if(newData[idx+1].length() >= 9){
-                    packTitle.setText(newData[idx+1].replace(newData[idx+1].substring(9),"..."));
-                }else{
-                    packTitle.setText(newData[idx+1]+"\n");
-                }
-                packTitle.setTextSize(17);
-                packTitle.setTypeface(Typeface.SERIF, Typeface.BOLD);
-                packTitle.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
-
-                TextView packPrice = new TextView(getApplicationContext());
-                packPrice.setWidth(130);
-                packPrice.setHeight(90);
-                packPrice.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                packPrice.setText(newData[idx+2]+"원" + "\n");
-                packPrice.setTextSize(17);
-                packPrice.setTypeface(Typeface.SERIF,Typeface.BOLD);
-
-                TableRow newRow = new TableRow(getApplicationContext());
-
-                newRow.addView(packID);
-                newRow.addView(packTitle);
-                newRow.addView(packPrice);
-
-                newRow.setOnClickListener(new View.OnClickListener(){
-                    @Override
-                    public void onClick(View v){
-                        Intent intent = new Intent(PackageActivity.this, PackDetailActivity.class);
-
-                        intent.putExtra("title", packTitle.getText().toString());
-                        intent.putExtra("price", packPrice.getText().toString());
-                        intent.putExtra("id", packID.getText().toString());
-                        intent.putExtra("username", username);
-                        startActivity(intent);
-                    }
-                });
-
-
-                stringBuffer.setLength(0);
-                table.addView(newRow);
-
+            for (int i = 0; i < stringArr.length / 3; i++) {
+                list.add(new PackageSingleItem(stringArr[idx + 1], stringArr[idx], stringArr[idx + 2],
+                        R.drawable.bookmark_non_background, R.drawable.bookmark));
                 idx += 3;
             }
+            editText = findViewById(R.id.searchKeyword);
+
+            // editText 리스터 작성
+            editText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    String searchText = editText.getText().toString();
+                    search_list.clear();
+
+                    if(searchText.equals("")){
+                        adapter.setItems(list);
+                    }
+                    else {
+                        // 검색 단어를 포함하는지 확인
+                        for (int a = 0; a < list.size(); a++) {
+                            if (list.get(a).title.toLowerCase().contains(searchText.toLowerCase())) {
+                                search_list.add(list.get(a));
+                            }
+                            adapter.setItems(search_list);
+                        }
+                    }
+                }
+            });
+
+            // 리사이클러뷰, 어댑터 연결
+            RecyclerView recyclerView = findViewById(R.id.recyclerView2);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            adapter = new PackRecyclerViewAdapter(list, this, username);
+            recyclerView.setAdapter(adapter);
 
         }catch (Exception e){
             e.printStackTrace();
@@ -128,11 +139,23 @@ public class PackageActivity extends AppCompatActivity {
 
     public void onClickedToMain(View view){
         Intent toMain = new Intent(this, MainActivity.class);
+        toMain.putExtra("username", username);
+        toMain.putExtra("user", userid);
+
         startActivity(toMain);
     }
 
-    public void onClickedToMyPage(View view){
+    public void onClickedLogout(View view){
+        Intent toLogin = new Intent(this, LoginActivity.class);
+        startActivity(toLogin);
+    }
 
+    public void onClickedToMyPage(View view){
+        Intent toMypage = new Intent(this, MyPageActivity.class);
+
+        toMypage.putExtra("user", this.userid);
+        toMypage.putExtra("username", username);
+        startActivity(toMypage);
     }
 
     public void onClickedToLogin(View view){
@@ -141,83 +164,35 @@ public class PackageActivity extends AppCompatActivity {
         startActivity(toLogin);
     }
 
-    public void onClickedSearch(View view){
-        TableLayout tb = findViewById(R.id.tableLayout);
-        tb.removeAllViews();
-        try {
-            Class.forName(DRIVER); // DRIVER
-            this.connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+    public void onClickedToQA(View view){
+        if (this.username.equals("")){
+            Snackbar.make(view, "로그인을 진행해주세요.", BaseTransientBottomBar.LENGTH_LONG).show();
+        }else{
+            Intent toQA = new Intent(this, ComplainOrQA.class);
+            toQA.putExtra("username", username);
 
-            TextView searchKeyword = findViewById(R.id.searchKeyword);
-            String key = searchKeyword.getText().toString();
-
-            Statement statement = connection.createStatement();
-            String query = "SELECT PACK_ID,PACK_NAME, PRICE FROM CREATE_PACK WHERE PACK_NAME LIKE '%" + key + "%'";
-
-            ResultSet resultSet = statement.executeQuery(query);
-            StringBuffer stringBuffer = new StringBuffer();
-
-            while (resultSet.next()){
-                stringBuffer.append(resultSet.getString(1)+","); // 패키지 명
-                stringBuffer.append(resultSet.getString(2)+","); // 가격
-                stringBuffer.append(resultSet.getString(3)+",");
-            }
-            String[] newData = stringBuffer.toString().split(","); // 각 행을 담기 위한 배열 ,로 구분
-
-            int idx = 0;
-
-            for(int i = 0; i < newData.length / 3; i++){
-                TextView packID = new TextView(this);
-                packID.setWidth(60);
-                packID.setText(newData[idx]+"\n");
-                packID.setTextSize(17);
-                packID.setTypeface(Typeface.SERIF,Typeface.BOLD);
-
-                TextView packTitle = new TextView(this);
-                packTitle.setWidth(220);
-                packTitle.setHeight(150);
-                if(newData[idx+1].length() >= 9){
-                    packTitle.setText(newData[idx+1].replace(newData[idx+1].substring(9),"..."));
-                }else{
-                    packTitle.setText(newData[idx+1] + "\n");
-                }
-
-                packTitle.setTextSize(17);
-                packTitle.setTypeface(Typeface.SERIF, Typeface.BOLD);
-
-                TextView packPrice = new TextView(this);
-                packPrice.setWidth(130);
-                packPrice.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                packPrice.setText(newData[idx+2]+"원\n");
-                packPrice.setTextSize(18);
-                packPrice.setTypeface(Typeface.SERIF,Typeface.BOLD);
-
-
-                TableRow newRow = new TableRow(getApplicationContext());
-                newRow.addView(packID);
-                newRow.addView(packTitle);
-                newRow.addView(packPrice);
-
-                newRow.setOnClickListener(new View.OnClickListener(){
-                    @Override
-                    public void onClick(View v){
-                        Intent intent = new Intent(PackageActivity.this, PackDetailActivity.class);
-
-                        intent.putExtra("title", packTitle.getText().toString());
-                        intent.putExtra("price", packPrice.getText().toString());
-                        intent.putExtra("id", packID.getText().toString());
-                        startActivity(intent);
-                    }
-                });
-
-                TableLayout table = findViewById(R.id.tableLayout);
-                table.addView(newRow);
-
-                idx += 3;
-            }
-
-        }catch (Exception e){
-            e.printStackTrace();
+            startActivity(toQA);
         }
+
+    }
+
+    public void onClickedToBookmark(View view){
+        if (this.username.equals("")){
+            Snackbar.make(view, "로그인을 진행해주세요.", BaseTransientBottomBar.LENGTH_LONG).show();
+        }else {
+            Intent toBookMark = new Intent(this, BookMarkActivity.class);
+            toBookMark.putExtra("username", username);
+            toBookMark.putExtra("user", this.userid);
+
+            startActivity(toBookMark);
+        }
+    }
+
+    public void onClickedToOneByOne(View view){
+        Intent toOneByOne = new Intent(this, OneByOne.class);
+        toOneByOne.putExtra("username", username);
+        toOneByOne.putExtra("user", this.userid);
+
+        startActivity(toOneByOne);
     }
 }
