@@ -18,9 +18,9 @@ import java.sql.Statement;
 public class JoinActivity extends AppCompatActivity {
     // 본인 DB계정으로 변경
     private static final String DRIVER = "oracle.jdbc.OracleDriver";
-    private static final String URL = "jdbc:oracle:thin:@192.168.137.1:1521:xe";
-    private static final String USERNAME = "c##group";
-    private static final String PASSWORD = "1234";
+    private static final String URL = "jdbc:oracle:thin:@IPv4Address:port:xe";
+    private static final String USERNAME = "username";
+    private static final String PASSWORD = "password";
     private Connection connection;
 
     @Override
