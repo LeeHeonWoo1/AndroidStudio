@@ -19,12 +19,10 @@ import java.sql.Statement;
 public class LoginActivity extends AppCompatActivity {
     // 본인 DB계정으로 변경
     private static final String DRIVER = "oracle.jdbc.OracleDriver";
-
-    private static final String URL = "jdbc:oracle:thin:@192.168.30.4:1521:xe";
-    private static final String USERNAME = "c##group";
-    private static final String PASSWORD = "1234";
+    private static final String URL = "jdbc:oracle:thin:@IPv4Address:port:xe";
+    private static final String USERNAME = "username";
+    private static final String PASSWORD = "password";
     private Connection connection;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +30,6 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         //보안정책
-
         StrictMode.ThreadPolicy threadPolicy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(threadPolicy);
 
@@ -69,7 +66,7 @@ public class LoginActivity extends AppCompatActivity {
             if(sb2.toString().equals(id) && sb3.toString().equals(ps)){
                 Intent intent = new Intent(this, MainActivity.class);
 
-                intent.putExtra("값",sb2.toString());
+                intent.putExtra("user",sb2.toString());
                 intent.putExtra("username", sb.toString());
                 Toast.makeText(this,sb.toString()+"님 로그인이 완료되었습니다!", Toast.LENGTH_LONG).show();
                 startActivity(intent);
