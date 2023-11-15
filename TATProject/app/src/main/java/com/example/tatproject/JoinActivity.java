@@ -16,16 +16,12 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 
 public class JoinActivity extends AppCompatActivity {
-
-
     // 본인 DB계정으로 변경
     private static final String DRIVER = "oracle.jdbc.OracleDriver";
-
-    private static final String URL = "jdbc:oracle:thin:@192.168.30.4:1521:xe";
+    private static final String URL = "jdbc:oracle:thin:@192.168.137.1:1521:xe";
     private static final String USERNAME = "c##group";
     private static final String PASSWORD = "1234";
     private Connection connection;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +32,6 @@ public class JoinActivity extends AppCompatActivity {
 
         StrictMode.ThreadPolicy threadPolicy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(threadPolicy);
-
-
     }
 
     public void onClicked(View view){
@@ -62,15 +56,15 @@ public class JoinActivity extends AppCompatActivity {
             String tell = tell_tv.getText().toString();
             String mail = mail_tv.getText().toString();
 
-            statement.executeQuery("INSERT INTO CUS_USER VALUES('"+name+"','"+id+"','"+pass+"',"+
-                    0+",'bronze','"+tell+"','"+mail+"')"); // 회원가입 쿼리문
+            ResultSet join = statement.executeQuery("INSERT INTO CUS_USER VALUES('"+name+"','"+id+"','"+pass+"',"+
+                    0+",'bronze','"+tell+"','"+mail+"', NULL, NULL, NULL)"); // 회원가입 쿼리문
 
             Toast.makeText(getApplicationContext(),"회원가입이 완료되었습니다. 로그인을 해주세요!",Toast.LENGTH_LONG).show();
             startActivity(intent);
 
 
         }catch (SQLIntegrityConstraintViolationException e){
-            Toast.makeText(this,"중복된 계정입니다.",Toast.LENGTH_LONG).show();
+            Toast.makeText(this,e.toString(),Toast.LENGTH_LONG).show();
         }catch (Exception e) {
             Toast.makeText(this,e.toString(),Toast.LENGTH_LONG).show();
         }
