@@ -30,7 +30,7 @@ import javax.xml.transform.Result;
 
 public class PackRecyclerViewAdapter extends RecyclerView.Adapter<PackRecyclerViewAdapter.ViewHolder> {
     private static final String DRIVER = "oracle.jdbc.OracleDriver";
-    private static final String URL = "jdbc:oracle:thin:@192.168.30.4:1521:xe";
+    private static final String URL = "jdbc:oracle:thin:@IPv4Address:port:xe";
     private static final String USERNAME = "c##group";
     private static final String PASSWORD = "1234";
     private Connection connection;
