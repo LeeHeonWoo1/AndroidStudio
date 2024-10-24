@@ -15,9 +15,9 @@ import java.sql.Statement;
 
 public class GetAllData extends AppCompatActivity {
     private static final String DRIVER = "oracle.jdbc.OracleDriver";
-    private static final String URL = "jdbc:oracle:thin:@192.168.30.4:1521:xe";
-    private static final String USERNAME = "hr";
-    private static final String PASSWORD = "1234";
+    private static final String URL = "jdbc:oracle:thin:@IPv4Address:port:xe";
+    private static final String USERNAME = "username";
+    private static final String PASSWORD = "password";
     private Connection connection;
 
     @Override
